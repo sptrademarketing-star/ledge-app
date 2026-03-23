@@ -685,7 +685,7 @@ export default function LedgeApp(){
     const today=td();
     const prompt=`Extract expense from: "${text}"\nReturn ONLY JSON: {"description":"1-4 words","amount":number,"currency":"${acct.currency}","category":"one of: ${CATS.map(c=>c.label).join(",")}","date":"YYYY-MM-DD"}\nToday: ${today}`;
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:prompt}]})});
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":import.meta.env.VITE_ANTHROPIC_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:prompt}]})});
       if(!res.ok) throw new Error(`HTTP ${res.status}`);
       const data=await res.json();
       const raw=data.content?.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim();
